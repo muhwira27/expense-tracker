@@ -28,9 +28,7 @@ Route::get('/', function () {
 });
 
 Route::resource('/expenses', ExpenseController::class);
-Route::get('/expenses/{expense}/edit', [ExpenseController::class, 'edit']);
 Route::post('/expenses/{expense}/edit', [ExpenseController::class, 'update']);
-Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy']);
 
 Route::get('/dashboard', function () {
   return Inertia::render('Dashboard');
