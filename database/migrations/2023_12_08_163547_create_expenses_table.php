@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Nama pengeluaran
-            $table->string('type'); // Tipe pengeluaran
-            $table->decimal('amount', 10, 2); // Jumlah pengeluaran dengan 2 digit desimal
-            $table->text('description')->nullable(); // Deskripsi, opsional
-            $table->date('date'); // Tanggal pengeluaran
-            $table->string('receipt_image')->nullable(); // Gambar struk, opsional
+            $table->string('name');
+            $table->string('type');
+            $table->decimal('amount', 10, 2);
+            $table->text('description')->nullable(); 
+            $table->date('date');
             $table->timestamps();
         });
     }
