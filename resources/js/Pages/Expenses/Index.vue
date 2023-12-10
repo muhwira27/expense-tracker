@@ -2,16 +2,31 @@
   <div class="px-14 py-8 bg-[#fcfbf9]">
     <section class="flex justify-between items-center mb-6">
       <h2 class="text-[22px] font-semibold">Daftar Pengeluaran</h2>
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
         <h3>Sort By</h3>
         <select @change="changeSort"
-          class="border-gray-300 rounded-md h-9 text-sm bg-[#fcfbf9]">
+          class="border-gray-260 rounded-md h-9 text-sm bg-[#fcfbf9]">
           <option value="date">Date</option>
           <option value="name">Name</option>
           <option value="amount">Amount</option>
         </select>
+        <button @click="toggleSortOrder"
+          class="focus:outline-none">
+          <!-- Ikon untuk ascending -->
+          <img v-if="state.isAscending"
+            width="26"
+            height="26"
+            src="https://img.icons8.com/external-creatype-outline-colourcreatype/64/external-descending-miscellaneous-user-interface-v1-creatype-outline-colourcreatype.png"
+            alt="external-descending-miscellaneous-user-interface-v1-creatype-outline-colourcreatype" />
+          <!-- Ikon untuk descending -->
+          <img v-else
+            width="26"
+            height="26"
+            src="https://img.icons8.com/external-creatype-outline-colourcreatype/64/external-descending-miscellaneous-user-interface-v1-creatype-outline-colourcreatype-2.png"
+            alt="external-descending-miscellaneous-user-interface-v1-creatype-outline-colourcreatype-2" />
+        </button>
         <Link href="/expenses/create"
-          class="bg-blue-500 hover:bg-blue-700 text-white text-[15px] h-9 font-bold py-2 px-4 rounded">
+          class="bg-blue-500 hover:bg-blue-700 text-white text-[15px] ml-5 h-9 font-bold py-2 px-4 rounded">
         Tambah Pengeluaran
         </Link>
       </div>
@@ -33,7 +48,7 @@
           </div>
           <!-- Expense Type and Amount -->
           <div class="flex flex-col items-center w-36">
-            <div class="text-lg font-medium text-center">{{ expense.type }}</div>
+            <div class="text-base font-medium text-center">{{ expense.type }}</div>
           </div>
           <div class="flex flex-col items-start w-44">
             <div class="text-lg font-medium text-start">{{ currency(expense.amount) }}</div>
@@ -113,8 +128,7 @@
 
 <script setup>
 import { reactive, onMounted, toRefs } from "vue";
-import { Inertia } from '@inertiajs/inertia';
-import { Link } from '@inertiajs/vue3'
+import { Link, router } from '@inertiajs/vue3';
 import ConfirmationModal from '../../Components/ConfirmationModal.vue';
 
 const props = defineProps({
@@ -125,7 +139,8 @@ const state = reactive({
   localExpenses: [],
   showDeleteModal: false,
   selectedExpense: null,
-  sortKey: 'date'
+  sortKey: 'date',
+  isAscending: true
 });
 
 const initializeExpenses = () => {
@@ -133,6 +148,27 @@ const initializeExpenses = () => {
     ...expense,
     showDescription: false
   }));
+};
+
+const sortExpenses = () => {
+  state.localExpenses.sort((a, b) => {
+    const valueA = state.sortKey === 'amount' ? parseFloat(a[state.sortKey]) : a[state.sortKey].toLowerCase();
+    const valueB = state.sortKey === 'amount' ? parseFloat(b[state.sortKey]) : b[state.sortKey].toLowerCase();
+
+    if (valueA < valueB) return state.isAscending ? -1 : 1;
+    if (valueA > valueB) return state.isAscending ? 1 : -1;
+    return 0;
+  });
+};
+
+const toggleSortOrder = () => {
+  state.isAscending = !state.isAscending;
+  sortExpenses(); //
+};
+
+const changeSort = (event) => {
+  state.sortKey = event.target.value;
+  sortExpenses();
 };
 
 const currency = (value) => {
@@ -157,9 +193,9 @@ const deleteExpense = (expense) => {
 
 const confirmDelete = () => {
   if (state.selectedExpense) {
-    Inertia.delete(`/expenses/${state.selectedExpense.id}`);
-    console.log('hapus')
-    state.showDeleteModal = false;
+    router.delete(`/expenses/${state.selectedExpense.id}`, {
+      onSuccess: () => router.visit('/expenses')
+    });
   }
 };
 
