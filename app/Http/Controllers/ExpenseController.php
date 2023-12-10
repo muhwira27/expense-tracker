@@ -28,12 +28,6 @@ class ExpenseController extends Controller
         return redirect()->route('expenses.index');
     }
 
-    // Menampilkan detail pengeluaran
-    public function show(Expense $expense)
-    {
-        return Inertia::render('Expenses/Show', ['expense' => $expense]);
-    }
-
     // Menampilkan form untuk mengedit pengeluaran
     public function edit(Expense $expense)
     {
@@ -51,6 +45,5 @@ class ExpenseController extends Controller
     public function destroy(Expense $expense)
     {
         $expense->delete();
-        return redirect()->route('expenses.index');
     }
 }
