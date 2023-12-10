@@ -22,6 +22,8 @@
           <option value="Makanan dan Minuman">Makanan dan Minuman</option>
           <option value="Transportasi">Transportasi</option>
           <option value="Hiburan">Hiburan</option>
+          <option value="Pendidikan">Pendidikan</option>
+          <option value="Pakaian">Pakaian</option>
           <option value="Pembayaran Bulanan">Pembayaran Bulanan</option>
         </select>
       </div>
@@ -74,8 +76,7 @@
 
 <script setup>
 import { reactive, computed } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 
 const props = defineProps({
   isEditMode: Boolean,
@@ -107,6 +108,6 @@ const formattedAmount = computed({
 
 const submit = () => {
   const url = props.isEditMode ? `/expenses/${form.id}/edit` : "/expenses";
-  Inertia.post(url, form);
+  router.post(url, form);
 };
 </script>
