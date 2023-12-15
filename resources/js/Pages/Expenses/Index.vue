@@ -25,14 +25,15 @@
             src="https://img.icons8.com/external-creatype-outline-colourcreatype/64/external-descending-miscellaneous-user-interface-v1-creatype-outline-colourcreatype-2.png"
             alt="external-descending-miscellaneous-user-interface-v1-creatype-outline-colourcreatype-2" />
         </button>
-        <Link href="/expenses/create"
-          class="bg-blue-500 hover:bg-blue-700 text-white text-[15px] ml-5 h-9 font-bold py-2 px-4 rounded">
-        Tambah Pengeluaran
-        </Link>
       </div>
     </section>
 
-    <section class="space-y-4">
+    <Link href="/expenses/create"
+      class="bg-blue-500 hover:bg-blue-700 text-white text-[15px] h-9 font-bold py-2 px-4 rounded">
+    Tambah Pengeluaran
+    </Link>
+
+    <section class="space-y-4 mt-6">
       <div v-for="expense in state.localExpenses"
         :key="expense.id"
         class="flex flex-col p-4 bg-[#fcfbf9] shadow rounded-lg">
